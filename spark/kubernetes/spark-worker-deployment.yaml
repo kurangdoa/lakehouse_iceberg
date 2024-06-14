@@ -1,0 +1,30 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: spark-worker
+  namespace: spark-dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: spark-worker
+  template:
+    metadata:
+      labels:
+        component: spark-worker
+    spec:
+      containers:
+        - name: spark-worker
+          image: spark-hadoop:3.5.1
+          command:
+          - /bin/sh
+          - -c
+          - |
+            ls &&
+            chmod +x spark-worker &&
+            ./spark-worker
+          ports:
+            - containerPort: 8081
+          # resources:
+          #   requests:
+          #     cpu: 100m

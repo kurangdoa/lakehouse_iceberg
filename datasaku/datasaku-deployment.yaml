@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: datasaku-dev
+spec:
+  containers:
+    - name: datasaku
+      image: datasaku:1.0.0
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /data/datasaku
+          name: datasakudata
+      command: [ "sleep" ]
+      args: [ "infinity" ]
+  volumes:
+    - name: datasakudata
+      persistentVolumeClaim:
+        claimName: datasaku-volume-claim

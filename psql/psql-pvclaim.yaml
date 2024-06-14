@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-datasaku-postgres-postgresql-ha-postgresql-0
+  labels:
+    app: postgres-app
+spec:
+  storageClassName: psql-manual
+  volumeName: postgres-volume-0
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-datasaku-postgres-postgresql-ha-postgresql-1
+  labels:
+    app: postgres-app
+spec:
+  storageClassName: psql-manual
+  volumeName: postgres-volume-1
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi
+

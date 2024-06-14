@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nessie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nessie
+  template:
+    metadata:
+      labels:
+        app: nessie
+    spec:
+      containers:
+        - name: nessie
+          image: ghcr.io/projectnessie/nessie:0.83.2-java
+          imagePullPolicy: IfNotPresent
+          env:
+          # - name: QUARKUS_HTTP_PORT
+          #   value: "6789"
+          - name: NESSIE_VERSION_STORE_TYPE
+            value: JDBC
+          - name: NESSIE_VERSION_STORE_PERSIST_JDBC_DATASOURCE
+            value: postgresql
+          - name: QUARKUS_DATASOURCE_POSTGRESQL_JDBC_URL
+            value: "jdbc:postgresql://datasaku-postgres-postgresql-ha-pgpool.psql-dev.svc.cluster.local:5433/nessie"
+          - name: QUARKUS_DATASOURCE_POSTGRESQL_USERNAME
+            value: postgres
+          - name: QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: nessie-secret
+                key: postgresql-password
+          ports:
+            - containerPort: 19120
+          volumeMounts:
+            - mountPath: /data/nessie
+              name: nessiedata
+      volumes:
+        - name: nessiedata
+          persistentVolumeClaim:
+            claimName: nessie-volume-claim

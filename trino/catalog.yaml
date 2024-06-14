@@ -1,0 +1,26 @@
+additionalCatalogs:
+  lakehouse: |-
+    connector.name=iceberg
+    iceberg.catalog.type=nessie
+    iceberg.nessie-catalog.uri=http://nessie.nessie-dev.svc.cluster.local:6788/api/v1
+    iceberg.nessie-catalog.ref=main
+    iceberg.nessie-catalog.default-warehouse-dir=s3a://iceberg/
+    fs.native-s3.enabled=True
+    s3.endpoint=http://minio-service.minio-dev.svc.cluster.local:6544
+    s3.path-style-access=True
+    s3.aws-access-key=minio
+    s3.aws-secret-key=minio123
+    s3.region=us-east-1
+    
+  lakehouse_dev: |-
+    connector.name=iceberg
+    iceberg.catalog.type=nessie
+    iceberg.nessie-catalog.uri=http://nessie-service.nessie-dev.svc.cluster.local:6788/api/v1
+    iceberg.nessie-catalog.ref=dev
+    iceberg.nessie-catalog.default-warehouse-dir=s3a://iceberg/
+    fs.native-s3.enabled=True
+    s3.endpoint=http://minio-service.minio-dev.svc.cluster.local:6544
+    s3.path-style-access=True
+    s3.aws-access-key=minio
+    s3.aws-secret-key=minio123
+    s3.region=us-east-1

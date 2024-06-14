@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: spark-worker
+  namespace: spark-dev
+spec:
+  type: LoadBalancer
+  ports:
+    - name: webui
+      port: 7899
+      targetPort: 8081
+      nodePort: 30009
+  selector:
+    component: spark-worker

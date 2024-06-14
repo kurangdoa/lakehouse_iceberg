@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: spark-master
+  namespace: spark-dev
+spec:
+  type: LoadBalancer
+  ports:
+    - name: webui
+      port: 7890
+      targetPort: 8080
+      nodePort: 30008
+    - name: spark
+      port: 7077
+      targetPort: 7077
+      nodePort: 30007
+  selector:
+    component: spark-master

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nessie-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: api
+      port: 6788
+      targetPort: 19120
+    # - name: web
+    #   port: 6789
+    #   targetPort: 8080
+  selector:
+    app: nessie

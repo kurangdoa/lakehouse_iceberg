@@ -1,0 +1,63 @@
+global:
+  postgresql:
+    username: postgres
+    # password: postgres
+    existingSecret: psql-secret
+  # storageClass: psql-manual
+
+service:
+  type: LoadBalancer
+  ports:
+    postgresql: 5433
+
+postgresql:
+  replicaCount: 2
+  username: postgres
+  # password: postgres
+  existingSecret: psql-secret
+  # repmgrPassword: postgres
+  resources: 
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+
+pgpool:
+  # adminPassword: postgres
+  existingSecret: psql-secret
+  resources: 
+    requests:
+      memory: "128Mi"
+      cpu: "500m"
+    limits:
+      memory: "256Mi"
+      cpu: "1000m"
+
+witness:
+  resources: 
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+
+# comment out below to use default pv
+
+# persistence:
+#   existingClaim: postgres-volume-claim
+#   storageClass: manual
+
+# volumePermissions:
+#   enabled: true
+
+persistence:
+  selector: 
+    matchLabels:
+      app: postgres-app
+  storageClass: psql-manual
+
+volumePermissions:
+  enabled: true

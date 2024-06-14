@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: trino
+  namespace: trino-dev
+spec:
+  type: LoadBalancer
+  ports:
+    - name: webui
+      port: 8765
+      targetPort: 8080
+      nodePort: 30088
+  selector:
+    component: coordinator
