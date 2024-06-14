@@ -1,0 +1,86 @@
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: datasaku-minio
+  namespace: minio-dev 
+spec:
+  serviceName: minio
+  replicas: 2
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      annotations:
+        pod.alpha.kubernetes.io/initialized: "true"
+      labels:
+        app: minio
+    spec:
+      containers:
+      - name: minio
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: "minio"
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: minio-password
+        # - name: MINIO_CONSOLE_SUBPATH
+        #   value: "/web-ui/"
+        # - name: MINIO_BROWSER_REDIRECT_URL
+        #   value: https://minio.kubernetes.net/ui
+        # - name: MINIO_SERVER_URL
+        #   value: https://minio.kubernetes.net
+        image: minio/minio
+        args:
+        - server
+        - http://datasaku-minio-{0...1}.minio.minio-dev.svc/data/minio
+        - --console-address   # which port for console
+        - :9001
+        ports:
+        - containerPort: 9000
+        # - containerPort: 9001
+        #   hostPort: 9001
+          # This ensures containers are allocated on separate hosts. Remove hostPort to allow multiple Minio containers on one host
+        # These volume mounts are persistent. Each pod in the PetSet
+        # gets a volume mounted based on this field.
+        volumeMounts:
+        - name: data
+          mountPath: /data/minio
+  # These are converted to volume claims by the controller
+  # and mounted at the paths mentioned above.
+
+  # comment out for dynamic provisioning
+  # volumeClaimTemplates:
+  # - metadata:
+  #     name: data
+  #     namespace: minio-dev 
+  #   spec:
+  #     accessModes:
+  #       - ReadWriteOnce
+  #     resources:
+  #       requests:
+  #         storage: 10Gi
+
+      # Uncomment and add storageClass specific to your requirements below. Read more https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
+      #storageClassName:
+
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+        namespace: minio-dev
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+        selector:
+          matchLabels:
+            app: minio-app
+        storageClassName: minio-manual
+

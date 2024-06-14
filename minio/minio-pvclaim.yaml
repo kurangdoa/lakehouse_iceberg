@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-datasaku-minio-0
+  labels:
+    app: minio-app
+spec:
+  storageClassName: minio-manual
+  volumeName: minio-volume-0
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-datasaku-minio-1
+  labels:
+    app: minio-app
+spec:
+  storageClassName: minio-manual
+  volumeName: minio-volume-1
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi
+
