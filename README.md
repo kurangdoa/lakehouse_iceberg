@@ -1,6 +1,6 @@
-# lakehouse
-In pursue of building local modern data warehouse 
-that will be easily migrate over to cloud.
+# Iceberg Lakehouse
+In pursue of building local modern data lakehouse. 
+Kubernetes is used to deploy every component of data lakehouse.
 
 ## Pre-requisites
 
@@ -33,3 +33,11 @@ minikube addons -p datasaku-cluster enable storage-provisioner
 ```
 minikube tunnel -p datasaku-cluster
 ```
+
+# Lakehouse Components
+To build the lakehouse, there will be several component needed.
+- minio
+- spark
+- nessie + psql
+- trino
+- jupyterhub + datasaku
