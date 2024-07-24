@@ -20,6 +20,7 @@ spec:
           - /bin/sh
           - -c
           - |
+            /usr/local/bin/python3.11 -m pip install pyfarmhash==0.3.2 &&
             ls &&
             chmod +x spark-master &&
             ./spark-master

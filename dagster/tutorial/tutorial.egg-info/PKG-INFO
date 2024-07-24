@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: tutorial
+Version: 0.0.0
+Requires-Dist: dagster
+Requires-Dist: dagster_duckdb_pandas
+Requires-Dist: dagster_duckdb
+Requires-Dist: dagster-cloud
+Requires-Dist: Faker==18.4.0
+Requires-Dist: matplotlib
+Requires-Dist: pandas
+Requires-Dist: requests
+Provides-Extra: dev
+Requires-Dist: dagster-webserver; extra == "dev"
+Requires-Dist: pytest; extra == "dev"

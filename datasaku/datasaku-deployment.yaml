@@ -10,8 +10,9 @@ spec:
       volumeMounts:
         - mountPath: /data/datasaku
           name: datasakudata
-      command: [ "sleep" ]
-      args: [ "infinity" ]
+      # command: ["sleep", "infinity"]
+      command: ["/bin/bash", "-c"]
+      args: ["sudo chown -R datasaku:datasaku /data && sleep infinity"]
   volumes:
     - name: datasakudata
       persistentVolumeClaim:

@@ -2,7 +2,7 @@ additionalCatalogs:
   lakehouse: |-
     connector.name=iceberg
     iceberg.catalog.type=nessie
-    iceberg.nessie-catalog.uri=http://nessie.nessie-dev.svc.cluster.local:6788/api/v1
+    iceberg.nessie-catalog.uri=http://nessie-service.nessie-dev.svc.cluster.local:6788/api/v1
     iceberg.nessie-catalog.ref=main
     iceberg.nessie-catalog.default-warehouse-dir=s3a://iceberg/
     fs.native-s3.enabled=True

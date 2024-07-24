@@ -25,7 +25,6 @@ kubectl apply -n nessie-dev -f nessie-pvclaim.yaml
 kubectl apply -n nessie-dev -f nessie-headless.yaml
 kubectl apply -n nessie-dev -f nessie-deployment.yaml
 kubectl apply -n nessie-dev -f nessie-service.yaml
-kubectl logs pod/nessie-899975d58-g5964 -n nessie-dev
 ```
 
 ## Troubleshoot
@@ -35,6 +34,7 @@ kubectl get pvc -n nessie-dev
 kubectl get deployments -n nessie-dev
 kubectl get pods -n nessie-dev -o wide
 kubectl get svc -n nessie-dev
+kubectl get all -n nessie-dev
 ```
 
 # Access

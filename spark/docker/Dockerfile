@@ -33,3 +33,19 @@ RUN wget https://repo.maven.apache.org/maven2/org/projectnessie/nessie-integrati
 ADD common.sh spark-master spark-worker /
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 ENV PATH $PATH:/opt/spark/bin
+
+# install git
+RUN apt-get -y update
+RUN apt-get -y install git
+
+# install python
+RUN cd /tmp && \
+    apt-get update -y && \
+    apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev -y && \
+    wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz && \
+    tar -xf Python-3.11.9.tgz && \
+    cd Python-3.11.9 && \
+    ./configure --enable-optimizations && \
+    make install
+
+RUN apt-get -y install python3-pip

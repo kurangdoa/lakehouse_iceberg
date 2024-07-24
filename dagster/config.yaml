@@ -1,0 +1,156 @@
+global:
+  # The DAGSTER_HOME env var is set by default on all nodes from this value
+  dagsterHome: "/home/dagster/dagster_home"
+
+postgresql:
+  # set postgresql.enabled to be false to disable deploy of a PostgreSQL database and use an
+  # existing external PostgreSQL database
+  enabled: false
+
+  # Used by init container to check that db is running. (Even if enabled:false)
+  image:
+    repository: "library/postgres"
+    tag: "14.6"
+    pullPolicy: IfNotPresent
+
+  # set this PostgreSQL hostname when using an external PostgreSQL database
+  postgresqlHost: "datasaku-postgres-postgresql-ha-pgpool.psql-dev.svc.cluster.local"
+  postgresqlScheme: "postgresql"
+  postgresqlUsername: "postgres"
+  postgresqlPassword: "postgres"
+  postgresqlDatabase: "dagster"
+  service:
+    port: 5433
+
+dagster-user-deployments:
+  enabled: true
+  deployments:
+    - name: "k8s-example-user-code-1"
+      image:
+        repository: "docker.io/dagster/user-code-example"
+        tag: latest
+        pullPolicy: Always
+      dagsterApiGrpcArgs:
+        - "--python-file"
+        - "/example_project/example_repo/repo.py"
+      port: 3030
+      envSecrets:
+        - name: dagster-aws-access-key-id
+        - name: dagster-aws-secret-access-key
+    - name: "k8s-example-user-code-2"
+      image:
+        repository: "localhost:5555/test-python-image"
+        tag: 1.0.0
+        pullPolicy: Always
+      dagsterApiGrpcArgs:
+        - "--python-file"
+        - "/code_location/__init__.py"
+      port: 3030
+    # - name: "k8s-example-user-code-3"
+    #   image:
+    #     repository: "localhost:5555/datasaku"
+    #     tag: 1.0.0
+    #     pullPolicy: Always
+    #   dagsterApiGrpcArgs:
+    #     - "--python-file"
+    #     - "/code_location/__init__.py"
+    #   port: 3030
+    - name: "k8s-example-user-code-4"
+      image:
+        repository: "localhost:5555/datasaku"
+        tag: 1.0.0
+        pullPolicy: Always
+      dagsterApiGrpcArgs:
+        - "--module-name"
+        - "test"
+        - "--working-directory"
+        - "/home/datasaku/repo/sakuflow/"
+      port: 3030
+
+runLauncher:
+  type: K8sRunLauncher
+  config:
+    k8sRunLauncher:
+      envSecrets:
+        - name: dagster-aws-access-key-id
+        - name: dagster-aws-secret-access-key
+      # securityContext: 
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      #   # fsGroup: 1000
+      volumes:
+        - name: my-volume
+        - name: my-data
+      volumeMounts:
+        - name: my-volume
+          mountPath: /home/dagster/dagster_home
+        - name: my-data
+          mountPath: /data
+
+dagsterWebserver:
+  service:
+    type: LoadBalancer
+    # Defines the port where the webserver will serve requests; if changed, don't forget to update the
+    # livenessProbe and startupProbe entries below as well.
+    port: 8909
+    annotations: {}
+
+  # livenessProbe:
+  #   httpGet:
+  #     port: 8909
+  # startupProbe:
+  #   httpGet:
+  #     port: 8909
+
+  readinessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /server_info
+      port: 8909
+    periodSeconds: 20
+    successThreshold: 1
+    timeoutSeconds: 10
+
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /server_info
+      port: 8909
+    periodSeconds: 20
+    successThreshold: 1
+    timeoutSeconds: 10
+  envSecrets:
+    - name: dagster-aws-access-key-id
+    - name: dagster-aws-secret-access-key
+
+dagsterDaemon:
+  envSecrets:
+    - name: dagster-aws-access-key-id
+    - name: dagster-aws-secret-access-key
+
+pythonLogs:
+  ## The names of python loggers that will be captured as Dagster logs
+  managedPythonLoggers:
+    - foo_logger
+    # The log level for the instance. Logs emitted below this severity will be ignored.
+    # One of [NOTSET, DEBUG, INFO, WARNING, WARN, ERROR, FATAL, CRITICAL]
+  pythonLogLevel: INFO
+  # Python log handlers that will be applied to all Dagster logs
+  dagsterHandlerConfig:
+    handlers:
+      myHandler:
+        class: logging.FileHandler
+        filename: "/home/dagster/dagster_home/my_dagster_logs.log"
+        mode: "a"
+
+
+computeLogManager:
+  type: S3ComputeLogManager
+  config:
+    s3ComputeLogManager:
+      bucket: "dagster-log"
+      localDir: "/home/dagster/dagster_home/my_dagster_compute_logs"
+      prefix: "dag-log"
+      useSsl: false
+      verify: false
+      endpointUrl: http://minio-service.minio-dev.svc.cluster.local:6544

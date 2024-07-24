@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+tutorial/__init__.py
+tutorial/assets.py
+tutorial.egg-info/PKG-INFO
+tutorial.egg-info/SOURCES.txt
+tutorial.egg-info/dependency_links.txt
+tutorial.egg-info/requires.txt
+tutorial.egg-info/top_level.txt
+tutorial/resources/__init__.py

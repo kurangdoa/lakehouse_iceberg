@@ -5,6 +5,9 @@ ARG openjdk_version="11"
 RUN echo "root:root" | chpasswd 
 RUN useradd -ms /bin/bash  datasaku
 RUN echo "datasaku:pass" | chpasswd
+RUN adduser datasaku sudo
+RUN usermod -aG sudo datasaku
+USER root
 
 # part of java instalation taken from 
 # jupyter installation
@@ -32,7 +35,6 @@ RUN apt-get update --yes && \
 # install vs-code extension
 RUN curl -fsSL https://code-server.dev/install.sh | /bin/sh
 
-
 # define spark and hadoop versions
 ENV SPARK_VERSION=3.5.1
 ENV HADOOP_VERSION=3.3.4
@@ -58,7 +60,16 @@ RUN mkdir -p /opt && \
     ln -s spark-${SPARK_VERSION}-bin-hadoop3 spark && \
     echo Spark ${SPARK_VERSION} installed in /opt
 
+# create folder
+RUN mkdir -p /data/datasaku && \
+    chown -R datasaku:datasaku /data && \
+    chmod -R 755 /data
 
+# add sudoers
+# sudo EDITOR='tee -a' visudo -f /etc/sudoers.d/chown_data
+# RUN echo 'datasaku ALL=(ALL) NOPASSWD: /bin/chown -R datasaku:datasaku /data' >> /etc/sudoers.d/chown_data
+
+RUN echo 'datasaku ALL=(ALL) NOPASSWD: /bin/chown -R datasaku\:datasaku /data' | sudo EDITOR='tee -a' visudo -f /etc/sudoers.d/99-chowndata
 USER datasaku
 ENV HOME_DATASAKU=/home/datasaku
 ENV SPARK_HOME=/opt/spark
@@ -86,5 +97,14 @@ RUN mkdir ${HOME_DATASAKU}/.vscode-server
 RUN code-server --extensions-dir ~/.vscode-server/extensions \ 
                 --install-extension ms-python.python \
                 --install-extension ms-toolsai.jupyter
+
+RUN git clone https://github.com/kurangdoa/datasaku.git ${HOME_DATASAKU}/repo/datasaku
+RUN ${HOME_DATASAKU}/.venv/bin/pip install ${HOME_DATASAKU}/repo/datasaku
+ENV PATH $PATH:${HOME_DATASAKU}/.venv/bin
+RUN git clone https://github.com/kurangdoa/sakuflow.git ${HOME_DATASAKU}/repo/sakuflow
+RUN ${HOME_DATASAKU}/.venv/bin/pip install ${HOME_DATASAKU}/repo/sakuflow
+
+# copy code_location
+COPY ./code_location /code_location
 
 EXPOSE 4040

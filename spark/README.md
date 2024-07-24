@@ -51,9 +51,13 @@ kubectl get svc -n spark-dev
 kubectl get pods -n spark-dev -o wide
 kubectl get deployments -n spark-dev
 kubectl get pod -o wide -n spark-dev
+kubectl get all -n spark-dev
 ```
 # Access
 To access the spark UI, enter this URL below
 http://127.0.0.1:7887/proxy:spark-master:7890  
 or  
 http://spark.kubernetes.net:7890/ui
+
+# Troubleshoot
+If worker is not running correctly, check minikube tunnel and enter your sudo password again

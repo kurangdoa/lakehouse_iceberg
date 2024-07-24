@@ -1,0 +1,8 @@
+# Yaml for loading our single repository from our repos.py file:
+load_from:
+  - python_file:
+      relative_path: assets.py
+      working_directory: code_location/
+  - python_file:
+      relative_path: assets.py
+      working_directory: code_location_copy/

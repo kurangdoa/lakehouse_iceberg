@@ -46,3 +46,25 @@ kubectl get svc -n minio-dev
 # Access
 
 To access minio UI reach out to http://minio.kubernetes.net:6543 or 127.0.0.1:6543
+
+# Create Bucket
+
+In the UI, create bucket called **iceberg**
+
+
+# Optional
+
+## create nfs
+
+echo "$(realpath .)/_data -alldirs -mapall="$(id -u)":"$(id -g)" $(minikube ip -p datasaku-cluster)"  | sudo tee -a /etc/exports && sudo nfsd update
+
+sudo vi /etc/exports
+echo "/Users/rhyando/code/development/_data -network 192.168.49.0 -mask 255.255.255.0" | sudo tee -a /etc/exports && sudo nfsd update
+
+showmount -e
+
+echo "/Users/rhyando/code/development/_data -network 192.168.0.0 -mask 255.255.0.0 " | sudo tee -a /etc/exports && sudo nfsd update
+
+sudo mount 192.168.49.1:/Users/rhyando/code/development/_data /data
+
+sudo mount -t nfs -o nfsvers=3 192.168.178.241:/Users/rhyando/code/development/_data /var/data

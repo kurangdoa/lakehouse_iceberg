@@ -19,7 +19,7 @@ Kubernetes is used to deploy every component of data lakehouse.
 create cluster for the whole project
 ```
 minikube delete -p datasaku-cluster 
-minikube start -p datasaku-cluster --disk-size 20000mb --driver docker --memory=max --cpus=max
+minikube start -p datasaku-cluster --disk-size 60000mb --driver docker --memory=max --cpus=max
 ```
 
 ## Install add-ons
@@ -41,3 +41,10 @@ To build the lakehouse, there will be several component needed.
 - nessie + psql
 - trino
 - jupyterhub + datasaku
+
+# Optional
+
+## Create NFS Share
+```
+echo "$(realpath .)/_data -alldirs -mapall="$(id -u)":"$(id -g)" $(minikube ip -p datasaku-cluster)"  | sudo tee -a /etc/exports && sudo nfsd update
+```

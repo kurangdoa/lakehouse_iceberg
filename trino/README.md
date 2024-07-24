@@ -1,6 +1,6 @@
 # Instalation
 
-based on helm chart trnio
+based on helm chart trino
 
 ## Deployment
 ```
@@ -10,8 +10,9 @@ helm upgrade --cleanup-on-fail \
   --install datasaku-trino trino/trino \
   --namespace trino-dev \
   --create-namespace \
-  --values catalog.yaml
-  kubectl apply -n trino-dev -f trino-service.yaml
+  --values catalog.yaml \
+  --values service-value.yaml
+kubectl apply -n trino-dev -f trino-service.yaml
 ```
 
 ## Troubleshoot

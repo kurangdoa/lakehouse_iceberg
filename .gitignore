@@ -3,3 +3,7 @@ _coret
 **data
 **_backup
 .*.drawio.*
+*.drawio.png
+*.drawio.gif
+*.drawio.svg
+*.gif
