@@ -20,7 +20,7 @@ Apply secret in kubernetes to be used inside helm chart
 kubectl apply -n psql-dev -f psql-secret.yaml
 ```
 
-Create volume and volume claim
+Create volume and volume claim. By doing this, the Pod is attached to pre-configured PV and PVC.
 ```
 kubectl delete pv postgres-volume-0
 kubectl delete pv postgres-volume-1
@@ -37,7 +37,11 @@ helm upgrade --cleanup-on-fail \
   --namespace psql-dev \
   --create-namespace \
   --version=14.1.2 \
-  --values config.yaml --debug
+  --values config.yaml
+```
+
+To further troubleshoot  
+```
 kubectl get all -n psql-dev
 kubectl get pvc -n psql-dev
 kubectl describe pvc data-datasaku-postgres-postgresql-ha-postgresql-1 -n psql-dev
@@ -57,6 +61,7 @@ kubectl apply -n psql-dev  -f pgadmin-secret.yaml
 kubectl apply -n psql-dev  -f pgadmin-deployment.yaml
 kubectl apply -n psql-dev  -f pgadmin-service.yaml
 kubectl get svc -n psql-dev
+kubectl get all -n psql-dev
 ```
 
 # Access

@@ -1,11 +1,3 @@
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass
-# metadata:
-#   name: psql-manual
-# provisioner: kubernetes.io/no-provisioner
-# volumeBindingMode: WaitForFirstConsumer
-# ---
-
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -23,7 +15,7 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /data/postgresql0
+    path: /data/postgres/postgres0
 
 ---
 
@@ -44,4 +36,4 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /data/postgresql1
+    path: /data/postgres/postgres1
