@@ -33,9 +33,8 @@ kubectl get pvc -n psql-dev
 Helm upgrade and see the status of deployment
 ```
 helm upgrade --cleanup-on-fail \
-  --install datasaku-postgres oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
   --namespace psql-dev \
-  --create-namespace \
+  --install datasaku-postgres oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
   --version=14.1.2 \
   --values config.yaml
 ```
