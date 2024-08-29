@@ -23,13 +23,6 @@ spec:
     - ReadWriteMany
   hostPath:
     path: /data/minio/minio0
-  # nfs:
-  #   # The address 192.168.99.1 is the Minikube gateway to the host. This way
-  #   # not the container IP will be visible by the NFS server on the host machine,
-  #   # but the IP address of the `minikube ip` command. You will need to
-  #   # grant access to the `minikube ip` IP address.
-  #   server: 192.168.49.1
-  #   path: '/Users/rhyando/code/development/_data/minio/minio0'
 ---
 
 apiVersion: v1
@@ -49,10 +42,3 @@ spec:
     - ReadWriteMany
   hostPath:
     path: /data/minio/minio1
-  # nfs:
-  #   # The address 192.168.99.1 is the Minikube gateway to the host. This way
-  #   # not the container IP will be visible by the NFS server on the host machine,
-  #   # but the IP address of the `minikube ip` command. You will need to
-  #   # grant access to the `minikube ip` IP address.
-  #   server: 192.168.49.1
-  #   path: '/Users/rhyando/code/development/_data/minio/minio1'

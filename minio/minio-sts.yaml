@@ -44,6 +44,7 @@ spec:
         # - containerPort: 9001
         #   hostPort: 9001
           # This ensures containers are allocated on separate hosts. Remove hostPort to allow multiple Minio containers on one host
+          
         # These volume mounts are persistent. Each pod in the PetSet
         # gets a volume mounted based on this field.
         volumeMounts:

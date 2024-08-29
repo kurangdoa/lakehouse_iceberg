@@ -1,3 +1,5 @@
+# why we name the metadata like below, https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/preexisting-pd
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
