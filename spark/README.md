@@ -2,10 +2,12 @@
 Based on https://github.com/testdrivenio/spark-kubernetes
 
 ## Build Docker Images in Minikube VM
+This will build image inside minikube
 ```
 eval $(minikube -p datasaku-cluster docker-env)
 docker build -f ./docker/Dockerfile -t spark-hadoop:3.5.1 ./docker
 ```
+
 ## Delete Resource and Create Namespace
 ```
 kubectl delete namespace spark-dev
@@ -28,7 +30,6 @@ To use DNS in your local, execute
 echo "127.0.0.1 spark.kubernetes.net" | sudo tee -a /etc/hosts
 or echo "$(minikube -p spark-cluster ip) spark-kubernetes" | sudo tee -a /etc/hosts
 ```
-
 
 ## Deploy Spark UI Proxy
 based on https://github.com/aseigneurin/spark-ui-proxy
@@ -53,6 +54,7 @@ kubectl get deployments -n spark-dev
 kubectl get pod -o wide -n spark-dev
 kubectl get all -n spark-dev
 ```
+
 # Access
 To access the spark UI, enter this URL below
 http://127.0.0.1:7887/proxy:spark-master:7890  
